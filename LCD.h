@@ -20,4 +20,4 @@
 
 void LCD_Char(uint8_t data);
 void LCD_Command(uint8_t command);
-
+void LCD_Init(void);
