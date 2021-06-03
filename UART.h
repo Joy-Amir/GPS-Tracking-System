@@ -7,3 +7,4 @@
 
 void UART0_Init(void);
 uint8_t UART0_InChar(void);
+void UART2_Init(void);
