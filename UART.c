@@ -28,3 +28,9 @@ void UART0_Init(void)
 	GPIO_PORTA_AMSEL_R &=~0X03;
 }
 
+uint8_t UART0_InChar(void)
+{
+	while((UART0_FR_R & 0X10)!=0);
+	return (uint8_t) UART0_DR_R&0XFF;
+}
+
