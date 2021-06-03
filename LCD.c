@@ -83,3 +83,15 @@ void LCD_Char(uint8_t data)
 
 }
 
+void LCD_Cursor(uint8_t pos)
+{
+   LCD_Command(0X80 + (pos % 16));
+}
+   
+void LCD_Clear(void)
+{
+
+   LCD_Command(0x01);
+}
+
+
