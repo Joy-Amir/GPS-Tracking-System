@@ -23,3 +23,4 @@ void LCD_Command(uint8_t command);
 void LCD_Init(void);
 void LCD_Cursor(uint8_t pos);
 void LCD_Clear(void);
+void LCD_Data(char* data);
