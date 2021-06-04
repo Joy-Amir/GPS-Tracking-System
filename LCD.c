@@ -93,5 +93,18 @@ void LCD_Clear(void)
 
    LCD_Command(0x01);
 }
+void LCD_Data(char* data)
+{
+	uint8_t length;
+	uint8_t i;
+	length = strlen(data);
+	LCD_Clear();
+	for(i = 0; (i < length && i < 16); i++)
+	{
+		LCD_Cursor(i);
+		LCD_Char(data[i]);
+		LCD_Command(0xC0 + 16); //Hide cursor
+	}
+}
 
 
