@@ -1,4 +1,5 @@
 # include "PORTF.h"
+
 void PORTF_Init(void)
 {
 	volatile unsigned long delay;
@@ -33,5 +34,25 @@ void turn_on_Led_100(uint32_t distance) {
 		PORTF_Output(0x02);
 
 	}
+}
+
+//PortF Interrupt Intialization
+
+void Start_GPS_Init(void)
+{
+	SYSCTL_RCGCGPIO_R |= 0x00000020;
+	//flag=0;
+	GPIO_PORTF_DIR_R &= ~0x11;
+	GPIO_PORTF_DEN_R |= 0x11;
+	GPIO_PORTF_DIR_R &= ~0x11;
+	GPIO_PORTF_PUR_R |= 0x11;
+	GPIO_PORTF_IS_R &= ~0x11;
+	GPIO_PORTF_IBE_R &= ~0x11;
+	GPIO_PORTF_IEV_R &= ~0x11;
+	GPIO_PORTF_ICR_R = 0x11;
+	GPIO_PORTF_IM_R |= 0x11;
+	NVIC_PRI7_R = (NVIC_PRI7_R & 0xFF00FFFF) | 0x00A00000;
+	NVIC_EN0_R = 0x40000000;
+	//EnableInterrupts();
 }
 
