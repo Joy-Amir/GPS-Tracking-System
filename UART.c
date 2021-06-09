@@ -68,3 +68,85 @@ uint8_t UART0_InChar(void)
 	return (uint8_t) UART0_DR_R&0XFF;
 }
 
+uint8_t UART2_InChar(void)
+{
+	while((UART2_FR_R & 0X10)!=0);
+	return (uint8_t) UART2_DR_R&0XFF;
+}
+
+void UART2_OutChar(uint8_t data)
+{
+	while((UART2_FR_R & 0X20)!=0);
+	UART2_DR_R = data;
+}
+
+void UART0_OutChar(uint8_t data)
+{
+	while((UART0_FR_R & 0X20)!=0);
+	UART0_DR_R = data;
+}
+
+
+
+void get_coordinates(void)
+{
+	char tag_check[] = "$GPGLL";
+	char tag[7];
+	char input, valid;
+	char latitude[10];
+	char latitude_type;
+	char longitude[11];
+	char longitude_type;
+	uint8_t i;
+		
+			for(i = 0; i < 6; i++)
+				tag[i] = UART2_InChar();
+			if (strcmp(tag_check, tag) == 0)
+			{
+				GPIO_PORTF_DATA_R= 0X02;
+				input = UART2_InChar();///bypass the comma
+				for(i = 0; i < 10; i++)
+				{
+					latitude[i] = UART2_InChar();
+				}
+				input = UART2_InChar();///bypass the comma
+				latitude_type = UART2_InChar();
+			
+				input = UART2_InChar();///bypass the comma
+				for(i = 0; i < 11; i++)
+				{
+					longitude[i] = UART2_InChar();
+				}
+				input = UART2_InChar();///bypass the comma
+				longitude_type = UART2_InChar();
+				for(i = 0; i < 11; i++)
+				{
+					input = UART2_InChar();
+				}
+				valid = UART2_InChar();
+				if(valid == 'A')
+				{output(latitude, longitude, latitude_type, longitude_type);}
+			
+			}
+}
+
+//For testing
+void output(char* latitude, char*longitude, char latitude_type, char longitude_type)
+{
+	uint8_t i;
+	for(i = 0; i < 10; i++)
+	{
+		UART0_OutChar(latitude[i]);
+	}
+	UART0_OutChar(',');
+	UART0_OutChar(latitude_type);
+	UART0_OutChar('\n');
+	for(i = 0; i < 11; i++)
+	{
+		UART0_OutChar(longitude[i]);
+	}
+		UART0_OutChar(',');
+		UART0_OutChar(longitude_type);
+		UART0_OutChar('\n');
+}
+
