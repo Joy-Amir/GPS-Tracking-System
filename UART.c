@@ -1,45 +1,7 @@
-/*# include "UART.h"
-
-void UART0_Init(void)
-{
-	//using UART0, PORTA
-	SYSCTL_RCGCUART_R |= 0X01; 
-	SYSCTL_RCGCGPIO_R |= 0X01; 
-	
- 
-	// UART0 initialization 
-	//Disable UART
-	UART0_CTL_R = 0X0; 
-	// Using 16MHz, 9600 baud rate
-	UART0_IBRD_R = 104; 
-	UART0_FBRD_R = 11; 
-	
-	//Set word length to 8 bits, Enable FiFo
-	UART0_LCRH_R = 0x70;
-	//Enable UART, Rx, Tx	
-	UART0_CTL_R = 0x301; 
- 
-	
-	GPIO_PORTA_DEN_R |= 0x03; 
-	GPIO_PORTA_AFSEL_R |= 0x03; 
-	GPIO_PORTA_PCTL_R = (GPIO_PORTA_PCTL_R & 0XFFFFFF00)|0x11; 
-	GPIO_PORTA_AMSEL_R &=~0X03;
-}
-
-uint8_t UART0_InChar(void)
-{
-	while((UART0_FR_R & 0X10)!=0);
-	return (uint8_t) UART0_DR_R&0XFF;
-}
-void UART0_OutChar(uint8_t data)
-{
-	while((UART0_FR_R & 0X20)!=0);
-	UART0_DR_R = data;
-}*/
-
 # include "UART.h"
 # include "distance.h"  //##############
 
+extern int end_flag;   //#############
 void UART0_Init(void)
 {
 	volatile unsigned long delay;
@@ -126,20 +88,20 @@ void UART0_OutChar(uint8_t data)
 
 
 
-void get_coordinates(char* latitude,char* longitude, char* latitude_type, char* longitude_type)
+uint8_t get_coordinates(char* latitude,char* longitude, char* latitude_type, char* longitude_type)
 {
 	char tag_check[] = "$GPGLL";
 	char tag[7];
 	char input, valid;
 	uint8_t i;
 		
-			for(i = 0; i < 6; i++)
+			for(i = 0; i < 6 && end_flag != 0; i++)
 				tag[i] = UART2_InChar();
 			if (strcmp(tag_check, tag) == 0)
 			{
 				GPIO_PORTF_DATA_R= 0X02;
 				input = UART2_InChar();///bypass the comma
-				for(i = 0; i < 10; i++)
+				for(i = 0; i < 10 && end_flag != 0; i++)
 				{
 					latitude[i] = UART2_InChar();
 				}
@@ -147,23 +109,24 @@ void get_coordinates(char* latitude,char* longitude, char* latitude_type, char* 
 				*latitude_type = UART2_InChar();
 			
 				input = UART2_InChar();///bypass the comma
-				for(i = 0; i < 11; i++)
+				for(i = 0; i < 11 && end_flag != 0; i++)
 				{
 					longitude[i] = UART2_InChar();
 				}
 				input = UART2_InChar();///bypass the comma
 				*longitude_type = UART2_InChar();
-				for(i = 0; i < 11; i++)
+				for(i = 0; i < 11 && end_flag != 0; i++)
 				{
 					input = UART2_InChar();
 				}
 				valid = UART2_InChar();
 				if(valid == 'A')
 				{
-					
+					return 1;
 				}
 			
 			}
+			return 0;
 }
 void output(char* latitude, char*longitude, char latitude_type, char longitude_type)
 {
@@ -183,6 +146,7 @@ void output(char* latitude, char*longitude, char latitude_type, char longitude_t
 		UART0_OutChar(longitude_type);
 		UART0_OutChar('\n');
 }
+
 
 
 
