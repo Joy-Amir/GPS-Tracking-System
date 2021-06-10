@@ -436,11 +436,6 @@
               <FilePath>.\UART.c</FilePath>
             </File>
             <File>
-              <FileName>Main_Dummy.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Main_Dummy.c</FilePath>
-            </File>
-            <File>
               <FileName>TotalDistance.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\TotalDistance.c</FilePath>
@@ -454,6 +449,11 @@
               <FileName>flash.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\flash.c</FilePath>
+            </File>
+            <File>
+              <FileName>main.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\main.c</FilePath>
             </File>
           </Files>
         </Group>

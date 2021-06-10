@@ -21,6 +21,7 @@ float total_distance = 0;
 float latitude[500];
 float longitude[500];
 int Npoints = 0;
+uint8_t data;
 
 void reverse(char* str, int len)
 {
@@ -99,7 +100,7 @@ while(1)
 		c = UART2_InChar();
 		if(c == 0X0A)
 		{
-			get_coordinates(lat, longit, &lat_type, &longit_type);
+			get_coordinates(/*lat, longit, &lat_type, &longit_type*/);
 			latitude[Npoints] = convert_latitude(lat);
 			longitude[Npoints] = convert_longitude(longit);
 			Npoints++;
@@ -112,4 +113,25 @@ while(1)
 	
 	}
 }
+}
+
+void GPIOF_Handler(void)
+{
+	Systick_Wait1ms(70);
+	
+	if (GPIO_PORTF_MIS_R & 0x10) //switch 1 for start
+	{
+		start_flag = 1;
+		GPIO_PORTF_ICR_R |= 0x10;
+	}
+
+	
+	if (GPIO_PORTF_MIS_R  & 0x01) // switch 2 for end
+	{
+		end_flag = 0;
+		PORTF_Output(0x08);
+		//ftoa(TotalDistance, res, 3); //the input: output of funtion TotalDistance from the main, the output is in array of characters
+		LCD_Data(result); //the "result" here is dummy
+		GPIO_PORTF_ICR_R |= 0x01;
+	}
 }
