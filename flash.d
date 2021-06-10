@@ -1,0 +1,12 @@
+.\flash.o: flash.c
+.\flash.o: flash.h
+.\flash.o: tm4c123gh6pm.h
+.\flash.o: C:\Keil\ARM\ARMCC\bin\..\include\stdint.h
+.\flash.o: C:\Keil\ARM\ARMCC\bin\..\include\string.h
+.\flash.o: C:\Keil\ARM\Inc\TI\TM4C123\TM4C123.h
+.\flash.o: C:\Keil\ARM\Inc\TI\TM4C123\TM4C123GH6PM.h
+.\flash.o: C:\Keil\ARM\CMSIS\Include\core_cm4.h
+.\flash.o: C:\Keil\ARM\CMSIS\Include\core_cmInstr.h
+.\flash.o: C:\Keil\ARM\CMSIS\Include\core_cmFunc.h
+.\flash.o: C:\Keil\ARM\CMSIS\Include\core_cm4_simd.h
+.\flash.o: C:\Keil\ARM\Inc\TI\TM4C123\system_TM4C123.h

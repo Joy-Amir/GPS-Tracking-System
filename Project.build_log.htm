@@ -3,10 +3,53 @@
 <pre>
 <h1>µVision Build Log</h1>
 <h2>Project:</h2>
-C:\Users\m\Desktop\ggg\GPS-Tracking-System\Project.uvproj
+C:\Users\Botros\Desktop\Botros\SYSTIC timer\GPS-Tracking-System\Project.uvproj
 Project File Date:  06/10/2021
 
 <h2>Output:</h2>
-</pre>
-</body>
-</html>
+Rebuild target 'Target 1'
+assembling startup_TM4C123.s...
+compiling PORTF.c...
+PORTF.h(13): warning:  #1-D: last line of file ends without a newline
+  void PortF_Interrupt_Init(void);
+PORTF.c: 1 warning, 0 errors
+compiling LCD.c...
+compiling Systick timer.c...
+compiling UART.c...
+UART.c(95): warning:  #550-D: variable "input" was set but never used
+        char input, valid;
+UART.c: 1 warning, 0 errors
+compiling Main_Dummy.c...
+PORTF.h(13): warning:  #1-D: last line of file ends without a newline
+  void PortF_Interrupt_Init(void);
+flash.h(12): warning:  #1-D: last line of file ends without a newline
+  void flashRead(void* data, int wordCount);
+Main_Dummy.c(104): warning:  #1-D: last line of file ends without a newline
+  }
+Main_Dummy.c(85): warning:  #177-D: variable "j" was declared but never referenced
+  int j;
+Main_Dummy.c(86): warning:  #177-D: variable "x" was declared but never referenced
+  float x ;
+Main_Dummy.c(87): warning:  #177-D: variable "y" was declared but never referenced
+  float y;
+Main_Dummy.c(88): warning:  #177-D: variable "z" was declared but never referenced
+  float z;
+Main_Dummy.c(90): warning:  #550-D: variable "b" was set but never used
+  float b[6] = {0};
+Main_Dummy.c: 8 warnings, 0 errors
+compiling TotalDistance.c...
+TotalDistance.h(8): warning:  #1-D: last line of file ends without a newline
+  float TotalDistance(float x1,float y1,float x2,float y2);
+TotalDistance.c: 1 warning, 0 errors
+compiling flash.c...
+flash.h(12): warning:  #1-D: last line of file ends without a newline
+  void flashRead(void* data, int wordCount);
+flash.c: 1 warning, 0 errors
+compiling distance.c...
+linking...
+Program Size: Code=15872 RO-data=1280 RW-data=4 ZI-data=612  
+".\Project.axf" - 0 Error(s), 12 Warning(s).
+mbols.
+Finished: 1 information, 0 warning and 1 error messages.
+".\Project.axf" - 1 Error(s), 12 Warning(s).
+Target not created
