@@ -113,8 +113,12 @@ void GPIOF_Handler(void)
 {
 	Systick_Wait1ms(70);
 	
-	//switch 1 for start
-	
+	if (GPIO_PORTF_MIS_R & 0x10) //switch 1 for start
+	{
+		start_flag = 1;
+		GPIO_PORTF_ICR_R |= 0x10;
+	}
+
 	
 	if (GPIO_PORTF_MIS_R  & 0x01) // switch 2 for end
 	{
