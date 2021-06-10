@@ -445,6 +445,16 @@
               <FileType>1</FileType>
               <FilePath>.\TotalDistance.c</FilePath>
             </File>
+            <File>
+              <FileName>distance.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\distance.c</FilePath>
+            </File>
+            <File>
+              <FileName>flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\flash.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

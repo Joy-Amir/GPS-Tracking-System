@@ -46,10 +46,10 @@ Section Cross References
     totaldistance.o(.text) refers to daddsub_clz.o(x$fpl$dadd) for __aeabi_dadd
     totaldistance.o(.text) refers to sqrt.o(i.sqrt) for sqrt
     totaldistance.o(.text) refers to asin.o(i.asin) for asin
-    flash.o(.text) refers to flash.o(.data) for flashKey
     distance.o(.text) refers to strtof.o(i.strtof) for strtof
     distance.o(.text) refers to fdiv.o(x$fpl$fdiv) for __aeabi_fdiv
     distance.o(.text) refers to faddsub_clz.o(x$fpl$fadd) for __aeabi_fadd
+    flash.o(.text) refers to flash.o(.data) for flashKey
     __main.o(!!!main) refers to rtentry.o(.ARM.Collect$$rtentry$$00000000) for __rt_entry
     d2f.o(x$fpl$d2f) refers (Special) to usenofp.o(x$fpl$usenofp) for __I$use$fp
     d2f.o(x$fpl$d2f) refers to fretinf.o(x$fpl$fretinf) for __fpl_fretinf
@@ -526,8 +526,8 @@ Image Symbol Table
     ../clib/angel/kernel.s                   0x00000000   Number         0  rtexit2.o ABSOLUTE
     ../clib/angel/kernel.s                   0x00000000   Number         0  rtentry4.o ABSOLUTE
     ../clib/angel/kernel.s                   0x00000000   Number         0  rtexit.o ABSOLUTE
-    ../clib/angel/kernel.s                   0x00000000   Number         0  rtentry2.o ABSOLUTE
     ../clib/angel/kernel.s                   0x00000000   Number         0  rtentry.o ABSOLUTE
+    ../clib/angel/kernel.s                   0x00000000   Number         0  rtentry2.o ABSOLUTE
     ../clib/angel/rt.s                       0x00000000   Number         0  rt_errno_addr.o ABSOLUTE
     ../clib/angel/rt.s                       0x00000000   Number         0  rt_errno_addr_intlibspace.o ABSOLUTE
     ../clib/angel/rt.s                       0x00000000   Number         0  rt_raise.o ABSOLUTE
@@ -704,8 +704,8 @@ Image Symbol Table
     .text                                    0x000007c4   Section        0  systick timer.o(.text)
     .text                                    0x00000828   Section        0  uart.o(.text)
     .text                                    0x00000ac4   Section        0  main_dummy.o(.text)
-    .text                                    0x00000c2c   Section        0  flash.o(.text)
-    .text                                    0x00000d0c   Section        0  distance.o(.text)
+    .text                                    0x00000c2c   Section        0  distance.o(.text)
+    .text                                    0x00000cdc   Section        0  flash.o(.text)
     .text                                    0x00000dbc   Section        0  strlen.o(.text)
     .text                                    0x00000dfa   Section      100  rt_memcpy_w.o(.text)
     .text                                    0x00000e5e   Section       78  rt_memclr_w.o(.text)
@@ -1051,12 +1051,12 @@ Image Symbol Table
     ftoa                                     0x00000b29   Thumb Code   140  main_dummy.o(.text)
     SystemInit                               0x00000bb5   Thumb Code    36  main_dummy.o(.text)
     main                                     0x00000bd9   Thumb Code    72  main_dummy.o(.text)
-    flashEnable                              0x00000c2d   Thumb Code    30  flash.o(.text)
-    flashErase                               0x00000c4b   Thumb Code    66  flash.o(.text)
-    flashWrite                               0x00000c8d   Thumb Code    90  flash.o(.text)
-    flashRead                                0x00000ce7   Thumb Code    26  flash.o(.text)
-    convert_latitude                         0x00000d0d   Thumb Code    82  distance.o(.text)
-    convert_longitude                        0x00000d5f   Thumb Code    88  distance.o(.text)
+    convert_latitude                         0x00000c2d   Thumb Code    82  distance.o(.text)
+    convert_longitude                        0x00000c7f   Thumb Code    88  distance.o(.text)
+    flashEnable                              0x00000cdd   Thumb Code    30  flash.o(.text)
+    flashErase                               0x00000cfb   Thumb Code    66  flash.o(.text)
+    flashWrite                               0x00000d3d   Thumb Code    90  flash.o(.text)
+    flashRead                                0x00000d97   Thumb Code    26  flash.o(.text)
     strlen                                   0x00000dbd   Thumb Code    62  strlen.o(.text)
     __aeabi_memcpy4                          0x00000dfb   Thumb Code     0  rt_memcpy_w.o(.text)
     __aeabi_memcpy8                          0x00000dfb   Thumb Code     0  rt_memcpy_w.o(.text)
@@ -1250,8 +1250,8 @@ Memory Map of the image
     0x00000826   0x00000002   PAD
     0x00000828   0x0000029c   Code   RO           65    .text               uart.o
     0x00000ac4   0x00000168   Code   RO           80    .text               main_dummy.o
-    0x00000c2c   0x000000e0   Code   RO          121    .text               flash.o
-    0x00000d0c   0x000000b0   Code   RO          167    .text               distance.o
+    0x00000c2c   0x000000b0   Code   RO          119    .text               distance.o
+    0x00000cdc   0x000000e0   Code   RO          139    .text               flash.o
     0x00000dbc   0x0000003e   Code   RO          187    .text               c_w.l(strlen.o)
     0x00000dfa   0x00000064   Code   RO          189    .text               c_w.l(rt_memcpy_w.o)
     0x00000e5e   0x0000004e   Code   RO          191    .text               c_w.l(rt_memclr_w.o)
@@ -1354,7 +1354,7 @@ Memory Map of the image
 
     Base Addr    Size         Type   Attr      Idx    E Section Name        Object
 
-    0x20000000   0x00000002   Data   RW          122    .data               flash.o
+    0x20000000   0x00000002   Data   RW          140    .data               flash.o
 
 
     Execution Region ER_ZI (Base: 0x20000004, Size: 0x00000264, Max: 0xffffffff, ABSOLUTE)
@@ -1374,17 +1374,17 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Object Name
 
-       176          6          0          0          0       1057   distance.o
-       224         12          0          2          0       1286   flash.o
-       548         30          0          0          0       1402   lcd.o
-       360         12         24          0          0       1612   main_dummy.o
-       360         32          0          0          0       5451   portf.o
-       276         24        620          0        512       5360   startup_tm4c123.o
-        98          0          0          0          0       1008   systick timer.o
-       668         42          0          0          0       2337   uart.o
+       176          6          0          0          0       1033   distance.o
+       224         12          0          2          0       1246   flash.o
+       548         30          0          0          0       1386   lcd.o
+       360         12         24          0          0       1596   main_dummy.o
+       360         32          0          0          0       5435   portf.o
+       276         24        620          0        512       5344   startup_tm4c123.o
+        98          0          0          0          0        996   systick timer.o
+       668         42          0          0          0       2321   uart.o
 
     ----------------------------------------------------------------------
-      2712        158        680          4        512      19513   Object Totals
+      2712        158        680          4        512      19357   Object Totals
          0          0         32          0          0          0   (incl. Generated)
          2          0          4          2          0          0   (incl. Padding)
 
@@ -1492,8 +1492,8 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-     15872        946       1280          4        612      21649   Grand Totals
-     15872        946       1280          4        612      21649   ELF Image Totals
+     15872        946       1280          4        612      21493   Grand Totals
+     15872        946       1280          4        612      21493   ELF Image Totals
      15872        946       1280          4          0          0   ROM Totals
 
 ==============================================================================
