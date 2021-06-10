@@ -1,8 +1,6 @@
 # include "LCD.h"
 # include "Systick timer.h"
 
-
-
 void LCD_Init(void)
 {
 	volatile unsigned long delay;
@@ -53,10 +51,12 @@ void LCD_Init(void)
 	Systick_Wait1ms(20);
 	//delay 2 milli "different in ref"
 	
-//	LCD_Command(0X06);							//Move cursor right
+	LCD_Command(0X06);							//Move cursor right
 	Systick_Wait1us(400);
 	//delay 40 micro "different in ref"
 }
+
+
 void LCD_Command(uint8_t command)
 {
 	GPIO_PORTA_DATA_R &=~(RS|RW);					//Clear Rs, Rw, En
@@ -65,7 +65,16 @@ void LCD_Command(uint8_t command)
 	
 	GPIO_PORTA_DATA_R|= EN;
 	//delay  150 ns minimum or 240
-	
+	if(command < 4)
+	{
+		//delay 2 ms
+		Systick_Wait1ms(2);
+	}
+	else
+	{
+		//delay 40 micro sec
+		Systick_Wait1us(40);
+	}
 	GPIO_PORTA_DATA_R &=~EN;
 }
 
@@ -83,6 +92,7 @@ void LCD_Char(uint8_t data)
 
 }
 
+
 void LCD_Cursor(uint8_t pos)
 {
    LCD_Command(0X80 + (pos % 16));
@@ -93,18 +103,24 @@ void LCD_Clear(void)
 
    LCD_Command(0x01);
 }
+
+//#########################
 void LCD_Data(char* data)
 {
 	uint8_t length;
 	uint8_t i;
+	uint8_t afterpoint = 3;
+	uint8_t flag = 0;
 	length = strlen(data);
 	LCD_Clear();
-	for(i = 0; (i < length && i < 16); i++)
+	for(i = 0; (i < length && i < 16 && afterpoint > 0); i++)
 	{
+		if(flag)
+			afterpoint --;
 		LCD_Cursor(i);
 		LCD_Char(data[i]);
 		LCD_Command(0xC0 + 16); //Hide cursor
+		if(data[i] == '.')
+			flag = 1;
 	}
 }
-
-
