@@ -13,6 +13,9 @@
 #include "flash.h"
 #define CPAC (*((volatile uint32_t *)0xE000ED88))
 		
+int start_flag = 0;
+int end_flag = 0;
+
 
 	void reverse(char* str, int len)
 {
@@ -89,6 +92,8 @@ float z;
 float a[6] = {3005.88788 ,03118.61276, 3025.88710,03118.61276,3001.11110,03118.61276};
 float b[6] = {0};
 
+while (start_flag == 1 & end_flag == 1)
+{
 for(i = 0;i<6;i++){
 	ftoa(a[i], res, 9);
 	b[i] = convert_latitude(res);
@@ -101,4 +106,23 @@ for(i = 0;i<6;i++){
 //}	
 
 
+}
+}
+
+void GPIOF_Handler(void)
+{
+	Systick_Wait1ms(70);
+	
+	//switch 1 for start
+	
+	
+	if (GPIO_PORTF_MIS_R  & 0x01) // switch 2 for end
+	{
+		end_flag = 0;
+		char lcd_total_distance[6];
+		PortF_Output(0x08);
+		//ftoa(TotalDistance, res, 3); //the input: output of funtion TotalDistance from the main, the output is in array of characters
+		LCD_Data(lcd_total_distance);
+		GPIO_PORTF_ICR_R |= 0x01;
+	}
 }
