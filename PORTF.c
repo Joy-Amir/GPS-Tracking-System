@@ -38,7 +38,7 @@ void turn_on_Led_100(uint32_t distance) {
 
 //PortF Interrupt Intialization
 
-void Start_GPS_Init(void)
+void PortF_Interrupt_Init(void)
 {
 	SYSCTL_RCGCGPIO_R |= 0x00000020;
 	//flag=0;
@@ -46,13 +46,13 @@ void Start_GPS_Init(void)
 	GPIO_PORTF_DEN_R |= 0x11;
 	GPIO_PORTF_DIR_R &= ~0x11;
 	GPIO_PORTF_PUR_R |= 0x11;
-	GPIO_PORTF_IS_R &= ~0x11;
-	GPIO_PORTF_IBE_R &= ~0x11;
-	GPIO_PORTF_IEV_R &= ~0x11;
-	GPIO_PORTF_ICR_R = 0x11;
-	GPIO_PORTF_IM_R |= 0x11;
-	NVIC_PRI7_R = (NVIC_PRI7_R & 0xFF00FFFF) | 0x00A00000;
-	NVIC_EN0_R = 0x40000000;
+	GPIO_PORTF_IS_R &= ~0x11;    // PF1 & PF4 Edge Sensitive
+	GPIO_PORTF_IBE_R &= ~0x11;   // PF1 & PF4 not Both Edges Sensitive
+	GPIO_PORTF_IEV_R &= ~0x11;  // PF1 & PF4 Falling Edge Event
+	GPIO_PORTF_ICR_R = 0x11;    //Flag1 & Flag4 Clear
+	GPIO_PORTF_IM_R |= 0x11;    //ARM Interrupt on PF1 & PF4
+	NVIC_PRI7_R = (NVIC_PRI7_R & 0xFF00FFFF) | 0x00A00000;  //Priority Register for Port F (Priority 5)
+	NVIC_EN0_R = 0x40000000;  // Enable Interrupt Register 30 in NVIC
 	//EnableInterrupts();
 }
 
