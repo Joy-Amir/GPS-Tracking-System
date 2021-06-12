@@ -15,8 +15,9 @@
 #define CPAC (*((volatile uint32_t *)0xE000ED88))
 	
 int start_flag = 0;
-int end_flag = 1;
-int done = 0;
+int end_flag = 0;
+int done = 1;
+//char result[8] = {'1','2','3','.','5','6','7','8'};
 char result[8];
 float total_distance = 0;
 float data[1000];
@@ -85,7 +86,7 @@ void send_data()
 	char lat[11];
 	char longit[11];
 	flashEnable();
-	flashRead(data2, 4);
+	flashRead(data2,(2000+1));
 	N = (int) data2[0];
 	for (i = 1; i <= N; i++)
 	{
@@ -104,6 +105,7 @@ void send_data()
 			UART0_OutChar(longit[j]);
 			//longit[j] = '\0';
 		}
+		UART0_OutChar('\r');
 		UART0_OutChar('\n');
 		
 	}
@@ -113,9 +115,11 @@ void send_data()
 
 void GPIOF_Handler(void)
 {
-	Systick_Wait1ms(70);
+	Systick_Wait1ms(50);
 	if (GPIO_PORTF_MIS_R  & 0x10) //switch 1 for start
 	{
+		
+		PORTF_Output(0x08);
 		GPIO_PORTF_ICR_R |= 0x10;
 		start_flag = 1;
 		Npoints = 0;
@@ -127,11 +131,14 @@ void GPIOF_Handler(void)
 		end_flag = 1;
 		start_flag = 0;
 		done = 0;
-		PORTF_Output(0x08);
+		PORTF_Output(0);
+		Systick_Wait1ms(2000);
+		
+PORTF_Output(0x04);
 		ftoa(total_distance, result, 3); //the input: output of funtion TotalDistance from the main, the output is in array of characters
 		LCD_Data(result);
 		flashEnable();
-		flashWrite(data,4);
+		flashWrite(data,((2000+1)+1));
 		
 	}
 }
@@ -139,11 +146,13 @@ void GPIOF_Handler(void)
 void SystemInit(void)
 {
 	UART0_Init();
-	CPAC |= 0X00F00000;
+  CPAC |= 0X00F00000;
 	PORTF_Init();
+	PortF_Interrupt_Init();
 	Systick_Init();
 	LCD_Init();
 	flashEnable();
+	UART2_Init();
 }
 
 
@@ -155,11 +164,12 @@ int main(void)
 	char longit[11];
 	char longit_type;
 	uint8_t state;
-	
+		
 while(1)
 {
-	if(start_flag == 0 && done == 0)
+	if(start_flag == 0)
 	{
+			//	PORTF_Output(0x02);
 		c = UART0_InChar();
 		if(c == 0X55)
 		{send_data();
@@ -168,10 +178,13 @@ while(1)
 		
 	if(start_flag == 1 && end_flag == 0)
 	{
+		//Systick_Wait1ms(100);
 		c = UART2_InChar();
 		if(c == 0X0A)
 		{
-			get_coordinates(lat, longit, &lat_type, &longit_type);
+			
+			
+			state = get_coordinates(lat, longit, &lat_type, &longit_type);
 			if (state == 1)
 			{	Npoints++;
 				data[0] = (float)Npoints;
@@ -182,6 +195,7 @@ while(1)
 				{
 					total_distance += TotalDistance(data[(2 * Npoints) - 3], data[(2 * Npoints) - 2], data[(2 * Npoints) - 1], data[(2 * Npoints)]);
 				}
+				Systick_Wait1ms(1800);
 			}
 			
 		}

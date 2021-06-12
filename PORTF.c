@@ -17,6 +17,14 @@ void PORTF_Init(void)
 
 void PORTF_Output(uint8_t data)
 {
+
+
+
+
+
+
+
+
 	GPIO_PORTF_DATA_R &=~0X0E;
 	GPIO_PORTF_DATA_R |= data;	
 }

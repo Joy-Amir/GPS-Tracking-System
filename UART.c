@@ -2,6 +2,7 @@
 # include "distance.h"  //##############
 
 extern int end_flag;   //#############
+extern int start_flag;
 void UART0_Init(void)
 {
 	volatile unsigned long delay;
@@ -64,7 +65,10 @@ void UART2_Init(void)
 
 uint8_t UART0_InChar(void)
 {
-	while((UART0_FR_R & 0X10)!=0);
+
+
+
+	while((UART0_FR_R & 0X10)!=0 && !start_flag);
 	return (uint8_t) UART0_DR_R&0XFF;
 }
 
@@ -95,13 +99,13 @@ uint8_t get_coordinates(char* latitude,char* longitude, char* latitude_type, cha
 	char input, valid;
 	uint8_t i;
 		
-			for(i = 0; i < 6 && end_flag != 0; i++)
+			for(i = 0; i < 6 && end_flag == 0; i++)
 				tag[i] = UART2_InChar();
 			if (strcmp(tag_check, tag) == 0)
 			{
 				GPIO_PORTF_DATA_R= 0X02;
 				input = UART2_InChar();///bypass the comma
-				for(i = 0; i < 10 && end_flag != 0; i++)
+				for(i = 0; i < 10 && end_flag == 0; i++)
 				{
 					latitude[i] = UART2_InChar();
 				}
@@ -109,13 +113,13 @@ uint8_t get_coordinates(char* latitude,char* longitude, char* latitude_type, cha
 				*latitude_type = UART2_InChar();
 			
 				input = UART2_InChar();///bypass the comma
-				for(i = 0; i < 11 && end_flag != 0; i++)
+				for(i = 0; i < 11 && end_flag == 0; i++)
 				{
 					longitude[i] = UART2_InChar();
 				}
 				input = UART2_InChar();///bypass the comma
 				*longitude_type = UART2_InChar();
-				for(i = 0; i < 11 && end_flag != 0; i++)
+				for(i = 0; i < 11 && end_flag == 0; i++)
 				{
 					input = UART2_InChar();
 				}
